@@ -26,6 +26,6 @@ async function osascriptSpawnAsync(script, opts) {
 }
 
 module.exports = {
-  osascriptExecAsync,
-  osascriptSpawnAsync,
+  execAsync: osascriptExecAsync,
+  spawnAsync: osascriptSpawnAsync,
 }

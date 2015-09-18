@@ -31,7 +31,7 @@ function osascriptArgs(script) {
 }
 
 module.exports = {
-  osascriptExecAsync: osascriptExecAsync,
-  osascriptSpawnAsync: osascriptSpawnAsync
+  execAsync: osascriptExecAsync,
+  spawnAsync: osascriptSpawnAsync
 };
 //# sourceMappingURL=sourcemaps/index.js.map
