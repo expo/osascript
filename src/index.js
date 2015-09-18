@@ -25,7 +25,22 @@ async function osascriptSpawnAsync(script, opts) {
   return await spawnAsync('osascript', osascriptArgs(script), opts);
 }
 
+async function isAppRunningAsync(appName) {
+  let zeroMeansNo = (await osascriptExecAsync('tell app "System Events" to count processes whose name is ' + JSON.stringify(appName))).trim();
+  return (zeroMeansNo !== '0');
+}
+
+async function safeIdOfAppAsync(appName) {
+  try {
+    return (await osascriptExecAsync('id of app "Simulator"')).trim();
+  } catch (e) {
+    return null;
+  }
+}
+
 module.exports = {
   execAsync: osascriptExecAsync,
+  isAppRunningAsync,
+  safeIdOfAppAsync,
   spawnAsync: osascriptSpawnAsync,
 }
