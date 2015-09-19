@@ -25,6 +25,10 @@ var safeIdOfAppAsync = _asyncToGenerator(function* (appName) {
   }
 });
 
+var openFinderToFolderAsync = _asyncToGenerator(function* (dir) {
+  return yield osascriptSpawnAsync(['tell application "Finder"', 'open POSIX file ' + JSON.stringify(dir), 'end tell']);
+});
+
 var execAsync = require('exec-async');
 var spawnAsync = require('@exponent/spawn-async');
 var util = require('util');
@@ -46,6 +50,7 @@ function osascriptArgs(script) {
 module.exports = {
   execAsync: osascriptExecAsync,
   isAppRunningAsync: isAppRunningAsync,
+  openFinderToFolderAsync: openFinderToFolderAsync,
   safeIdOfAppAsync: safeIdOfAppAsync,
   spawnAsync: osascriptSpawnAsync
 };

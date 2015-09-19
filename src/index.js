@@ -38,9 +38,18 @@ async function safeIdOfAppAsync(appName) {
   }
 }
 
+async function openFinderToFolderAsync(dir) {
+  return await osascriptSpawnAsync([
+      'tell application "Finder"',
+      'open POSIX file ' + JSON.stringify(dir),
+      'end tell',
+  ]);
+}
+
 module.exports = {
   execAsync: osascriptExecAsync,
   isAppRunningAsync,
+  openFinderToFolderAsync,
   safeIdOfAppAsync,
   spawnAsync: osascriptSpawnAsync,
 }
