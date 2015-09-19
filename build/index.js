@@ -37,12 +37,8 @@ var activateApp = _asyncToGenerator(function* (appName) {
   return yield osascriptSpawnAsync('tell app ' + JSON.stringify(appName) + ' to activate');
 });
 
-var openInAtom = _asyncToGenerator(function* (pth) {
-  return yield osascriptSpawn('tell app "Atom" to open ' + JSON.stringify(pth));
-});
-
-var openInSublime = _asyncToGenerator(function* (pth) {
-  return yield osascriptSpawn('tell app "Sublime Text" to open ' + JSON.stringify(pth));
+var openInAppAsync = _asyncToGenerator(function* (appName, pth) {
+  return yield osascriptSpawnAsync('tell app ' + JSON.stringify(appName) + ' to open ' + JSON.stringify(path.resolve(pth)));
 });
 
 var chooseAppAsync = _asyncToGenerator(function* (listOfAppNames) {
@@ -79,7 +75,49 @@ var chooseTerminalAppAsync = _asyncToGenerator(function* () {
   return yield chooseAppAsync(['iTerm',
   // 'Cathode',
   // 'Terminator',
-  'MacTerm', 'Terminal']);
+  // 'MacTerm',
+  'Terminal']);
+});
+
+var openInEditorAsync = _asyncToGenerator(function* (pth) {
+  var appName = yield chooseEditorAppAsync();
+  console.log("Will open in", appName);
+  return openInAppAsync(appName, pth);
+});
+
+var openItermToSpecificFolderAsync = _asyncToGenerator(function* (dir) {
+  return yield osascriptSpawnAsync(['tell application "iTerm"', 'make new terminal', 'tell the first terminal', 'activate current session', 'launch session "Default Session"', 'tell the last session', 'write text "cd ' + util.inspect(dir) + ' && clear"',
+  // 'write text "clear"',
+  'end tell', 'end tell', 'end tell']);
+  // exec("osascript -e 'tell application \"iTerm\"' -e 'make new terminal' -e 'tell the first terminal' -e 'activate current session' -e 'launch session \"Default Session\"' -e 'tell the last session' -e 'write text \"cd #{value}\"' -e 'write text \"clear\"' -e 'end tell' -e 'end tell' -e 'end tell' > /dev/null 2>&1")
+});
+
+var openTerminalToSpecificFolderAsync = _asyncToGenerator(function* (dir) {
+  var inTab = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+  if (inTab) {
+    return yield osascriptSpawnAsync(['tell application "terminal"', 'tell application "System Events" to tell process "terminal" to keystroke "t" using command down', 'do script with command "cd ' + util.inspect(dir) + ' && clear" in selected tab of the front window', 'end tell']);
+  } else {
+    return yield osascriptSpawnAsync(['tell application "terminal"', 'do script "cd ' + util.inspect(dir) + ' && clear"', 'end tell', 'tell application "terminal" to activate']);
+  }
+});
+
+var openFolderInTerminalAppAsync = _asyncToGenerator(function* (dir) {
+  var inTab = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+  var program = yield chooseTerminalAppAsync();
+
+  switch (program) {
+    case 'iTerm':
+      return yield openItermToSpecificFolderAsync(dir, inTab);
+      break;
+
+    case 'Terminal':
+    default:
+      return yield openTerminalToSpecificFolderAsync(dir, inTab);
+      break;
+
+  }
 });
 
 var execAsync = require('exec-async');
@@ -108,8 +146,11 @@ module.exports = {
   execAsync: osascriptExecAsync,
   isAppRunningAsync: isAppRunningAsync,
   openFinderToFolderAsync: openFinderToFolderAsync,
-  openInAtom: openInAtom,
-  openInSublime: openInSublime,
+  openFolderInTerminalAppAsync: openFolderInTerminalAppAsync,
+  openInAppAsync: openInAppAsync,
+  openInEditorAsync: openInEditorAsync,
+  openItermToSpecificFolderAsync: openItermToSpecificFolderAsync,
+  openTerminalToSpecificFolderAsync: openTerminalToSpecificFolderAsync,
   safeIdOfAppAsync: safeIdOfAppAsync,
   spawnAsync: osascriptSpawnAsync
 
