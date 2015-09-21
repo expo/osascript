@@ -38,7 +38,9 @@ var activateApp = _asyncToGenerator(function* (appName) {
 });
 
 var openInAppAsync = _asyncToGenerator(function* (appName, pth) {
-  return yield osascriptSpawnAsync('tell app ' + JSON.stringify(appName) + ' to open ' + JSON.stringify(path.resolve(pth)));
+  var cmd = 'tell app ' + JSON.stringify(appName) + ' to open ' + JSON.stringify(path.resolve(pth));
+  // console.log("cmd=", cmd);
+  return yield osascriptSpawnAsync(cmd);
 });
 
 var chooseAppAsync = _asyncToGenerator(function* (listOfAppNames) {
@@ -81,8 +83,8 @@ var chooseTerminalAppAsync = _asyncToGenerator(function* () {
 
 var openInEditorAsync = _asyncToGenerator(function* (pth) {
   var appName = yield chooseEditorAppAsync();
-  console.log("Will open in", appName);
-  return openInAppAsync(appName, pth);
+  console.log("Will open in", appName, pth);
+  return yield openInAppAsync(appName, pth);
 });
 
 var openItermToSpecificFolderAsync = _asyncToGenerator(function* (dir) {
@@ -121,6 +123,7 @@ var openFolderInTerminalAppAsync = _asyncToGenerator(function* (dir) {
 });
 
 var execAsync = require('exec-async');
+var path = require('path');
 var spawnAsync = require('@exponent/spawn-async');
 var util = require('util');
 

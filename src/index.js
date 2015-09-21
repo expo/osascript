@@ -1,4 +1,5 @@
 let execAsync = require('exec-async');
+let path = require('path');
 let spawnAsync = require('@exponent/spawn-async');
 let util = require('util');
 
@@ -52,7 +53,9 @@ async function activateApp(appName) {
 }
 
 async function openInAppAsync(appName, pth) {
-  return await osascriptSpawnAsync('tell app ' + JSON.stringify(appName) + ' to open ' + JSON.stringify(path.resolve(pth)));
+  let cmd = 'tell app ' + JSON.stringify(appName) + ' to open ' + JSON.stringify(path.resolve(pth));
+  // console.log("cmd=", cmd);
+  return await osascriptSpawnAsync(cmd);
 }
 
 async function chooseAppAsync(listOfAppNames) {
@@ -112,8 +115,8 @@ async function chooseTerminalAppAsync() {
 
 async function openInEditorAsync(pth) {
   let appName = await chooseEditorAppAsync();
-  console.log("Will open in", appName);
-  return openInAppAsync(appName, pth);
+  console.log("Will open in", appName, pth);
+  return await openInAppAsync(appName, pth);
 }
 
 async function openItermToSpecificFolderAsync(dir) {
