@@ -115,7 +115,7 @@ async function chooseTerminalAppAsync() {
 
 async function openInEditorAsync(pth) {
   let appName = await chooseEditorAppAsync();
-  console.log("Will open in", appName, pth);
+  console.log("Will open in " + appName + " -- " + pth);
   return await openInAppAsync(appName, pth);
 }
 

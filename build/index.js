@@ -83,7 +83,7 @@ var chooseTerminalAppAsync = _asyncToGenerator(function* () {
 
 var openInEditorAsync = _asyncToGenerator(function* (pth) {
   var appName = yield chooseEditorAppAsync();
-  console.log("Will open in", appName, pth);
+  console.log("Will open in " + appName + " -- " + pth);
   return yield openInAppAsync(appName, pth);
 });
 
