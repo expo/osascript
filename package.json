@@ -1,6 +1,6 @@
 {
   "name": "@expo/osascript",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Tools for running an osascripts in Node",
   "main": "build/index.js",
   "scripts": {
@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/exponentjs/osascript#readme",
   "dependencies": {
-    "@expo/spawn-async": "^1.2.8",
     "@expo/spawn-async": "^1.1.0",
     "exec-async": "^2.2.0"
   },
